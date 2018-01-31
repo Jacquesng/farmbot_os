@@ -56,7 +56,7 @@ ARDUINO_BUILD = $(ARDUINO_BUILDER) \
 	$(ARDUINO_BUILD_DIR_FLAGS) \
 	$(ARDUINO_SRC_INO)
 
-all: priv $(NIF) farmbot_arduino_firmware
+all: priv $(NIF) farmbot_arduino_firmware priv/cpu_usage
 
 farmbot_arduino_firmware_build_dirs: $(ARDUINO_BUILD_DIR) $(ARDUINO_CACHE_DIR)
 
@@ -74,6 +74,9 @@ farmduino: farmbot_arduino_firmware_build_dirs $(FARMDUINO_FW)
 
 priv:
 	mkdir -p priv
+
+priv/cpu_usage: c_src/cpu_usage.cpp
+	$(CXX) -o $@ $<
 
 $(NIF): c_src/build_calendar.c
 	$(CC) $(ERL_CFLAGS) $(NIF_CFLAGS) $(ERL_LDFLAGS) $(NIF_LDFLAGS) -o $@ $<
